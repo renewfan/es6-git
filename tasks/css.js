@@ -10,5 +10,5 @@ import args from './until/args';
 gulp.task('css',()=>{
     //打开app下所有目录文件
     return gulp.src('app/**/*.css')
-        .pipe(gulp.dest('server'))
+        .pipe(gulp.dest('server/public'))
 })
