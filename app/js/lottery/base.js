@@ -203,5 +203,39 @@ class Base{
         $(self.cart_el).append(tpl);
         self.getTotal();
     }
+    /**
+     * 重新计算金额等
+     */
+    getCount(){
+        let self=this;
+        let active=$('.boll-list .btn-boll-active').length;
+        // 计算彩票注数
+        let count=self.LotteryCount(active,self.cur_play);
+        // 计算奖金范围
+        let range=self.BonusCalculation(active,self.cur_play);
+        // 买彩票花的钱
+        let money=count*2;
+        //盈利的钱
+        let win1=range[0]-money;
+        let win2=range[1]-money;
+        let tpl;
+        //亏损了多少
+        let c1=(win1<0 && win2<0) ? Math.abs(win1) : win1;
+        let c1=(win1<0 && win2<0) ? Math.abs(win2) : win2;
+        if(count==0){
+            //没有亏损盈利标准
+            tpl=`您选了 <b class="red">${count}</b>注，共<b class="red">${count}*2</b>元`
+        }else if(range[0]===range[1]){
+            //最大盈利最小盈利一样
+            tpl=`您选了 <b class="red">${count}</b>注，共<b class="red">${count}*2</b>元 <em>若中奖，奖金：<strong class="red">${range[0]}</strong>元，您将${win1>=0 ? '盈利' : '亏损'}<strong class="${win1>=0 ? 'red' : 'green'}">${Math.abs(win1)}</strong>元</em>`
+        }else{
+            tpl=`您选了 <b>${count}</b>注，共<b>${count}*2</b>元 <em>若中奖，奖金：<strong class="red">${range[0]}</strong>至<strong class="red">${range[1]}</strong>元 ，您将${(win1<0 && win2<0) ? '亏损' : '盈利'}<strong class="${win1>=0 ? 'red' : 'green'}">${c1}</strong>至<strong class="${win2>=0 ? 'red' : 'green'}">${c2}</strong>元</em>`
+        }
+        $('.sel_info').html(tpl)
+    }
+    计算所有金额
+    getTotal(){
+        
+    }
 
 }
