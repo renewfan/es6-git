@@ -45,22 +45,27 @@ class Base{
         //padStart()和padEnd()一共接受两个参数，第一个参数是字符串补全生效的最大长度，第二个参数是用来补全的字符串。
         //如果原字符串的长度，等于或大于最大长度，则字符串补全不生效，返回原字符串
        for(let i=0;i<12;i++){
-           //''+2 数字转字符串
+        // add(value)：添加某个值，返回 Set 结构本身
+        //''+2 数字转字符串
         this.number.add(''+i).padStart(2,'0')
        } 
     }
     /**
      * 设置遗漏数据
-     * @param {array} missnum 传入的数据
+     * @param {array} miss_num 传入的数据
      */
-    setMissnum(missnum){
+    setMissnum(miss_num){
         let self=this;
+        //清空数据结构
         self.miss_num.clear();
+        //Object.entries()方法返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键值对数组
         for(let [index,item] of miss_num.entries()){
+            //set方法设置键名key对应的键值为value，然后返回整个 Map 结构。
             self.miss_num.set(index,item)
         }
         //显示到页面
         $(self.missnum_el).each(function(index,item){
+            // get方法读取key对应的键值，如果找不到key，返回undefined
             $(item).text(self.miss_num.get(index))
         })
     }
@@ -70,7 +75,9 @@ class Base{
      */
     setOpennum(num){
         let self=this;
+        //清空数据结构
         self.open_num.clear()
+        // Object.values方法返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键值
         for(let item of num.values()){
             self.open_num.add(item)
         }
@@ -221,7 +228,7 @@ class Base{
         let tpl;
         //亏损了多少
         let c1=(win1<0 && win2<0) ? Math.abs(win1) : win1;
-        let c1=(win1<0 && win2<0) ? Math.abs(win2) : win2;
+        let c2=(win1<0 && win2<0) ? Math.abs(win2) : win2;
         if(count==0){
             //没有亏损盈利标准
             tpl=`您选了 <b class="red">${count}</b>注，共<b class="red">${count}*2</b>元`
@@ -233,9 +240,58 @@ class Base{
         }
         $('.sel_info').html(tpl)
     }
-    计算所有金额
+    /**
+     * 计算所有金额
+     */
     getTotal(){
-        
+        let count = 0;
+        //遍历购物车
+        $('.codelist li').each(function(index,item){
+            count+=$(item).attr(count)*1;
+        })
+        //注数
+        $('#count').text(count);
+        //金额
+        $('#money').text(count*2);
     }
-
+    /**
+     * 生产随机数
+     * @param {*} num 
+     */
+    getRandnum(num){
+        let arr=[],index;
+        //初始化待选号码set转为数组
+        // Array.from方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象
+        let number=Array.from(this.number);
+        while(num--){
+            //生成随机数作为下标
+            index=Number.parseInt(Math.random()*number.length);
+            //形成随机数组
+            arr.push(number[index]);
+            //将加入随机数组的数字从原数组中删除，避免重复
+            number.splice(index,1);
+        }
+        //数组转字符串
+        return arr.join(' ');
+    }
+    getRandomCode(e){
+        //阻止默认事件
+        e.preventDefault();
+        let self=this;
+        //获取要生成随机注数
+        let num=e.currentTarget.getAttribute('count');
+        //获取当前玩法
+        let play=self.cur_play.match(/\d+/g)[0];
+        if(num==='0'){
+            //清空购物车
+            $(self.cart_el).html('');
+        }else{
+            for(let i=0;i<num;i++){
+                // 确认选号-组成html
+                self.addCodeItem(self.getRandnum(play),self.cur_play,self.play_list.get(self.cur_play).name,1)
+            }
+        }
+    }
 }
+
+export default Base
