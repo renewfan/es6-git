@@ -46,6 +46,7 @@
     "gulp-uglify": "^3.0.2",
     "gulp-util": "^3.0.8",
     "jquery": "^3.4.1",
+    "mockjs": "^1.0.1-beta3",
     "require-dir": "^1.2.0",
     "vinyl-named": "^1.1.0",
     "webpack": "^3.9.1",

@@ -3,23 +3,23 @@ class Caculate{
     /**
      * 计算彩票注数
      * @param {num} active_num 当前选中的号码
-     * @param {string} paly_name  当前玩法标识名称
+     * @param {string} play_name  当前玩法标识名称
      * @return {num} count  注数
      */
-    LotteryCount(active_num,paly_name){
+    LotteryCount(active_num,play_name){
         let count=0;
         // 选择的玩法是否在玩法列表中
         // playlist为 map 结构
         // has方法返回一个布尔值，表示某个键是否在当前 Map 对象之中
-        const exist=this.playlist.has(paly_name);
+        const exist=this.play_list.has(play_name);
         //创建元素为0，长度为 当前选中号码长度的数组
         const arr=new Array(active_num).fill(0);
-        // 检测paly_name第1个字符串是不是 r
+        // 检测play_name第1个字符串是不是 r
         //[ ]和at()都能读写string中的某一个字符
         //[ ]不具备下标越界检查功能，at()具备下标越界检查功能
-        if(exist && paly_name.at(0)==='r'){
+        if(exist && play_name.at(0)==='r'){
             //调用静态方法，按照选择的玩法生成排列组合
-            count=Caculate.PlayCombine(arr,paly_name.split('')[1])
+            count=Caculate.PlayCombine(arr,play_name.split('')[1]).length
         }
         return count;
     }
@@ -63,16 +63,17 @@ class Caculate{
                 }
             }
         })(arr,size,[])
+        return lastresult;
     }
 
     /**
      * 奖金范围计算
      * @param {num} active_num 当前选中的号码
-     * @param {string} paly_name  当前玩法标识名称
+     * @param {string} play_name  当前玩法标识名称
      * @return {array} range  奖金范围
      */
-    BonusCalculation(active_num,paly_name){
-        const play=paly_name.split('');
+    BonusCalculation(active_num,play_name){
+        const play=play_name.split('');
         const self=this;
         // 创建当前选中号码长度的数组 '3'*1 字符串转数字
         let arr=new Array(play[1]*1).fill(0)
@@ -115,6 +116,7 @@ class Caculate{
             }
         }
         //注数转金额
-        return [min,max].map(item=>self.playlist.get(paly_name).bonus)
+        return [min,max].map(item=>item*self.play_list.get(play_name).bonus)
     }
 }
+export default Caculate;

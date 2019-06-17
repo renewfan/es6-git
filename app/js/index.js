@@ -1,2 +1,3 @@
 import 'babel-polyfill';
-import Lottery from './lottery.js';
+import Lottery from './lottery';
+new Lottery();

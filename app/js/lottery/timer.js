@@ -8,9 +8,9 @@ class Timer{
     countdown(end,update,handle){
         const self=this;
         const nowtime=new Date().getTime();
-        if(nowtime-end){
+        if(nowtime-end>0){
             //已过截止时间
-            handle.call()
+            handle.call(self)
         }else{
             //当前距离截止时间还有多久
             let remaintime=end-nowtime;

@@ -44,10 +44,10 @@ class Base{
         //通过add()方法向 Set 结构加入成员，结果表明 Set 结构不会添加重复的值。
         //padStart()和padEnd()一共接受两个参数，第一个参数是字符串补全生效的最大长度，第二个参数是用来补全的字符串。
         //如果原字符串的长度，等于或大于最大长度，则字符串补全不生效，返回原字符串
-       for(let i=0;i<12;i++){
         // add(value)：添加某个值，返回 Set 结构本身
         //''+2 数字转字符串
-        this.number.add(''+i).padStart(2,'0')
+       for(let i=1;i<12;i++){
+        this.number.add((''+i).padStart(2,'0'))
        } 
     }
     /**
@@ -181,12 +181,12 @@ class Base{
     addCode(){
         let self=this;
         //两个数字一组分开
-        let $active=$('.boll-list .btn-boll').text().match(/\d{2}/g);
+        let $active=$('.boll-list .btn-boll-active').text().match(/\d{2}/g);
         let active=$active ? $active.length : 0;
         //计算彩票注数
         let count=self.LotteryCount(active,self.cur_play);
         if(count){
-            self.addCodeItem($active.join(''),self.cur_play,self.play_list.get(self.cur_play).name,count)
+            self.addCodeItem($active.join(' '),self.cur_play,self.play_list.get(self.cur_play).name,count)
         }
     }
     /**
@@ -203,7 +203,7 @@ class Base{
             <div class="code">
                 <b>${typeName}${count>1 ? '复式' : '单式'}</b>
                 <b class="em">${code}</b>
-                [${count}注，<em class="code-list-money">${count*2}</em>]
+                [${count}注，<em class="code-list-money">${count*2}元</em>]
             </div>
         </li>
         `;
@@ -231,12 +231,12 @@ class Base{
         let c2=(win1<0 && win2<0) ? Math.abs(win2) : win2;
         if(count==0){
             //没有亏损盈利标准
-            tpl=`您选了 <b class="red">${count}</b>注，共<b class="red">${count}*2</b>元`
+            tpl=`您选了 <b class="red">${count}</b>注，共<b class="red">${count*2}</b>元`
         }else if(range[0]===range[1]){
             //最大盈利最小盈利一样
-            tpl=`您选了 <b class="red">${count}</b>注，共<b class="red">${count}*2</b>元 <em>若中奖，奖金：<strong class="red">${range[0]}</strong>元，您将${win1>=0 ? '盈利' : '亏损'}<strong class="${win1>=0 ? 'red' : 'green'}">${Math.abs(win1)}</strong>元</em>`
+            tpl=`您选了 <b class="red">${count}</b>注，共<b class="red">${count*2}</b>元 <em>若中奖，奖金：<strong class="red">${range[0]}</strong>元，您将${win1>=0 ? '盈利' : '亏损'}<strong class="${win1>=0 ? 'red' : 'green'}">${Math.abs(win1)}</strong>元</em>`
         }else{
-            tpl=`您选了 <b>${count}</b>注，共<b>${count}*2</b>元 <em>若中奖，奖金：<strong class="red">${range[0]}</strong>至<strong class="red">${range[1]}</strong>元 ，您将${(win1<0 && win2<0) ? '亏损' : '盈利'}<strong class="${win1>=0 ? 'red' : 'green'}">${c1}</strong>至<strong class="${win2>=0 ? 'red' : 'green'}">${c2}</strong>元</em>`
+            tpl=`您选了 <b>${count}</b>注，共<b>${count*2}</b>元 <em>若中奖，奖金：<strong class="red">${range[0]}</strong>至<strong class="red">${range[1]}</strong>元 ，您将${(win1<0 && win2<0) ? '亏损' : '盈利'}<strong class="${win1>=0 ? 'red' : 'green'}">${c1}</strong>至<strong class="${win2>=0 ? 'red' : 'green'}">${c2}</strong>元</em>`
         }
         $('.sel_info').html(tpl)
     }
@@ -247,7 +247,7 @@ class Base{
         let count = 0;
         //遍历购物车
         $('.codelist li').each(function(index,item){
-            count+=$(item).attr(count)*1;
+            count+=$(item).attr('count')*1;
         })
         //注数
         $('#count').text(count);
@@ -294,4 +294,4 @@ class Base{
     }
 }
 
-export default Base
+export default Base;
